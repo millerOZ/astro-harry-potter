@@ -8,3 +8,7 @@ export interface CardItem {
   image: string;
   description: string;
 }
+export interface faq {
+  question: string;
+  response: string;
+}

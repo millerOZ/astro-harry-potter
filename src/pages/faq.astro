@@ -1,7 +1,22 @@
 ---
+import Title from "../components/Title.astro";
 import Layout from "../layouts/Layout.astro";
+import LayoutPost from "../layouts/LayoutPost.astro";
+import faqs from "../data/faqsData";
+import FaqItem from "../components/FaqItem.astro";
 ---
 
-<Layout title="faq">
-  <div>FAQ</div>
-</Layout>
+<LayoutPost title="faq">
+  <section>
+    <Title title="Preguntas frecuentes"></Title>
+    { faqs.map( (faq) => <FaqItem item={faq}></FaqItem>)}
+  </section>
+</LayoutPost>
+
+<style>
+  section{
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
