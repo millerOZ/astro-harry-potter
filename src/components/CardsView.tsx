@@ -12,7 +12,7 @@ export default function CardsView({ cards }: CardsViewProps) {
     <div>
         <button onClick={() => setCount(count + 1)}>Click me! {count}</button>
       <div className="cardsView">
-        {cards.map((card, index) => {
+        { cards.map((card, index) => {
           return index < 3 ? <CardView key={index} {...card} /> : null;
         })}
       </div>
