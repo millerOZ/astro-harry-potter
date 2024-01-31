@@ -223,7 +223,7 @@ function createComponent(arg1, moduleId, propagation) {
   }
 }
 
-const ASTRO_VERSION = "3.4.0";
+const ASTRO_VERSION = "3.6.4";
 
 function createAstroGlobFn() {
   const globHandler = (importMetaGlobResult) => {
@@ -678,7 +678,7 @@ const toIdent = (k) => k.trim().replace(/(?:(?!^)\b\w|\s+|[^\w]+)/g, (match, ind
 });
 const toAttributeString = (value, shouldEscape = true) => shouldEscape ? String(value).replace(/&/g, "&#38;").replace(/"/g, "&#34;") : value;
 const kebab = (k) => k.toLowerCase() === k ? k : k.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
-const toStyleString = (obj) => Object.entries(obj).map(([k, v]) => {
+const toStyleString = (obj) => Object.entries(obj).filter(([k, v]) => typeof v === "string" && v.trim() || typeof v === "number").map(([k, v]) => {
   if (k[0] !== "-" && k[1] !== "-")
     return `${kebab(k)}:${v}`;
   return `${k}:${v}`;
@@ -992,8 +992,15 @@ class AstroComponentInstance {
     this.factory = factory;
     this.slotValues = {};
     for (const name in slots) {
-      const value = slots[name](result);
-      this.slotValues[name] = () => value;
+      let didRender = false;
+      let value = slots[name](result);
+      this.slotValues[name] = () => {
+        if (!didRender) {
+          didRender = true;
+          return value;
+        }
+        return slots[name](result);
+      };
     }
   }
   async init(result) {

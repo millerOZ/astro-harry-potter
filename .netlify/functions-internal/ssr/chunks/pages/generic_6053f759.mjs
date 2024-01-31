@@ -1,9 +1,8 @@
 import { isRemotePath } from '@astrojs/internal-helpers/path';
 import mime from 'mime/lite.js';
-import { i as isESMImportedImage, g as getImage$1, a as getConfiguredImageService, b as isRemoteAllowed } from '../astro-assets-services_06973071.mjs';
-import { e as createAstro, f as createComponent, A as AstroError, k as ImageMissingAlt, r as renderTemplate, m as maybeRenderHead, h as addAttribute, s as spreadAttributes } from '../astro_e031d282.mjs';
+import { i as isESMImportedImage, g as getImage$1, a as getConfiguredImageService, b as isRemoteAllowed } from '../astro/assets-service_90880f3b.mjs';
+import { e as createAstro, f as createComponent, A as AstroError, k as ImageMissingAlt, r as renderTemplate, m as maybeRenderHead, h as addAttribute, s as spreadAttributes } from '../astro_e3fc0b0e.mjs';
 import 'clsx';
-import 'html-escaper';
 
 const fnv1a52 = (str) => {
   const len = str.length;
@@ -58,7 +57,7 @@ const $$Picture = createComponent(async ($$result, $$props, $$slots) => {
   Astro2.self = $$Picture;
   const defaultFormats = ["webp"];
   const defaultFallbackFormat = "png";
-  const specialFormatsFallback = ["gif", "svg"];
+  const specialFormatsFallback = ["gif", "svg", "jpg", "jpeg"];
   const { formats = defaultFormats, pictureAttributes = {}, fallbackFormat, ...props } = Astro2.props;
   if (props.alt === void 0 || props.alt === null) {
     throw new AstroError(ImageMissingAlt);
@@ -78,14 +77,18 @@ const $$Picture = createComponent(async ($$result, $$props, $$slots) => {
     widths: props.widths,
     densities: props.densities
   });
-  const additionalAttributes = {};
-  if (fallbackImage.srcSet.values.length > 0) {
-    additionalAttributes.srcset = fallbackImage.srcSet.attribute;
+  const imgAdditionalAttributes = {};
+  const sourceAdditionaAttributes = {};
+  if (props.sizes) {
+    sourceAdditionaAttributes.sizes = props.sizes;
   }
-  return renderTemplate`${maybeRenderHead()}<picture${spreadAttributes(pictureAttributes)}>${Object.entries(optimizedImages).map(([_, image]) => {
+  if (fallbackImage.srcSet.values.length > 0) {
+    imgAdditionalAttributes.srcset = fallbackImage.srcSet.attribute;
+  }
+  return renderTemplate`${maybeRenderHead()}<picture${spreadAttributes(pictureAttributes)}> ${Object.entries(optimizedImages).map(([_, image]) => {
     const srcsetAttribute = props.densities || !props.densities && !props.widths ? `${image.src}${image.srcSet.values.length > 0 ? ", " + image.srcSet.attribute : ""}` : image.srcSet.attribute;
-    return renderTemplate`<source${addAttribute(srcsetAttribute, "srcset")}${addAttribute("image/" + image.options.format, "type")}>`;
-  })}<img${addAttribute(fallbackImage.src, "src")}${spreadAttributes(additionalAttributes)}${spreadAttributes(fallbackImage.attributes)}></picture>`;
+    return renderTemplate`<source${addAttribute(srcsetAttribute, "srcset")}${addAttribute("image/" + image.options.format, "type")}${spreadAttributes(sourceAdditionaAttributes)}>`;
+  })} <img${addAttribute(fallbackImage.src, "src")}${spreadAttributes(imgAdditionalAttributes)}${spreadAttributes(fallbackImage.attributes)}> </picture>`;
 }, "/Users/millerossasamboni/Downloads/Programacion/Astro/harry-potter/node_modules/astro/components/Picture.astro", void 0);
 
 const imageConfig = {"service":{"entrypoint":"astro/assets/services/sharp","config":{}},"domains":[],"remotePatterns":[]};
@@ -98,7 +101,7 @@ async function loadRemoteImage(src) {
     if (!res.ok) {
       return void 0;
     }
-    return Buffer.from(await res.arrayBuffer());
+    return await res.arrayBuffer();
   } catch (err) {
     return void 0;
   }
@@ -123,7 +126,11 @@ const GET = async ({ request }) => {
     if (!inputBuffer) {
       return new Response("Not Found", { status: 404 });
     }
-    const { data, format } = await imageService.transform(inputBuffer, transform, imageConfig);
+    const { data, format } = await imageService.transform(
+      new Uint8Array(inputBuffer),
+      transform,
+      imageConfig
+    );
     return new Response(data, {
       status: 200,
       headers: {

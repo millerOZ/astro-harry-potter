@@ -1,24 +1,13 @@
 import * as adapter from '@astrojs/netlify/ssr-function.js';
 import { renderers } from './renderers.mjs';
-import { manifest } from './manifest_584c8700.mjs';
-import 'react';
-import 'react-dom/server';
-import 'cookie';
-import 'kleur/colors';
-import 'string-width';
-import '@astrojs/internal-helpers/path';
-import './chunks/astro_e031d282.mjs';
-import 'clsx';
-import 'html-escaper';
-import 'mime';
-import 'path-to-regexp';
+import { manifest } from './manifest_d5156333.mjs';
 
-const _page0  = () => import('./chunks/generic_512ae61b.mjs');
-const _page1  = () => import('./chunks/index_0c016f7d.mjs');
-const _page2  = () => import('./chunks/blog_4e2f490c.mjs');
-const _page3  = () => import('./chunks/post-01_a9fa4ae5.mjs');
-const _page4  = () => import('./chunks/post-02_1f5c6564.mjs');
-const _page5  = () => import('./chunks/faq_db4a64c9.mjs');const pageMap = new Map([["node_modules/astro/dist/assets/endpoint/generic.js", _page0],["src/pages/index.astro", _page1],["src/pages/blog.astro", _page2],["src/pages/post/post-01.md", _page3],["src/pages/post/post-02.md", _page4],["src/pages/faq.astro", _page5]]);
+const _page0  = () => import('./chunks/generic_101692ee.mjs');
+const _page1  = () => import('./chunks/index_119837b6.mjs');
+const _page2  = () => import('./chunks/blog_3cfa05ba.mjs');
+const _page3  = () => import('./chunks/post-01_bc89e04f.mjs');
+const _page4  = () => import('./chunks/post-02_e527f191.mjs');
+const _page5  = () => import('./chunks/faq_6fcb8896.mjs');const pageMap = new Map([["node_modules/astro/dist/assets/endpoint/generic.js", _page0],["src/pages/index.astro", _page1],["src/pages/blog.astro", _page2],["src/pages/post/post-01.md", _page3],["src/pages/post/post-02.md", _page4],["src/pages/faq.astro", _page5]]);
 const _manifest = Object.assign(manifest, {
 	pageMap,
 	renderers,

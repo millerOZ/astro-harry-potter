@@ -1,5 +1,5 @@
 import { isRemotePath, joinPaths } from '@astrojs/internal-helpers/path';
-import { A as AstroError, E as ExpectedImage, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, a as UnsupportedImageConversion, b as InvalidImageService, c as ExpectedImageOptions, d as MissingSharp } from './astro_e031d282.mjs';
+import { A as AstroError, E as ExpectedImage, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, a as UnsupportedImageConversion, b as InvalidImageService, c as ExpectedImageOptions, d as MissingSharp } from '../astro_e3fc0b0e.mjs';
 
 const VALID_SUPPORTED_FORMATS = [
   "jpeg",
@@ -12,6 +12,7 @@ const VALID_SUPPORTED_FORMATS = [
   "avif"
 ];
 const DEFAULT_OUTPUT_FORMAT = "webp";
+const DEFAULT_HASH_PROPS = ["src", "width", "height", "format", "quality"];
 
 function isLocalService(service) {
   if (!service) {
@@ -27,6 +28,7 @@ function parseQuality(quality) {
   return result;
 }
 const baseService = {
+  propertiesToHash: DEFAULT_HASH_PROPS,
   validateOptions(options) {
     if (!options.src || typeof options.src !== "string" && typeof options.src !== "object") {
       throw new AstroError({
@@ -297,20 +299,28 @@ async function getImage(options, imageConfig) {
     ...options,
     src: typeof options.src === "object" && "then" in options.src ? (await options.src).default ?? await options.src : options.src
   };
+  const clonedSrc = isESMImportedImage(resolvedOptions.src) ? (
+    // @ts-expect-error - clone is a private, hidden prop
+    resolvedOptions.src.clone ?? resolvedOptions.src
+  ) : resolvedOptions.src;
+  resolvedOptions.src = clonedSrc;
   const validatedOptions = service.validateOptions ? await service.validateOptions(resolvedOptions, imageConfig) : resolvedOptions;
   const srcSetTransforms = service.getSrcSet ? await service.getSrcSet(validatedOptions, imageConfig) : [];
   let imageURL = await service.getURL(validatedOptions, imageConfig);
   let srcSets = await Promise.all(
     srcSetTransforms.map(async (srcSet) => ({
+      transform: srcSet.transform,
       url: await service.getURL(srcSet.transform, imageConfig),
       descriptor: srcSet.descriptor,
       attributes: srcSet.attributes
     }))
   );
   if (isLocalService(service) && globalThis.astroAsset.addStaticImage && !(isRemoteImage(validatedOptions.src) && imageURL === validatedOptions.src)) {
-    imageURL = globalThis.astroAsset.addStaticImage(validatedOptions);
+    const propsToHash = service.propertiesToHash ?? DEFAULT_HASH_PROPS;
+    imageURL = globalThis.astroAsset.addStaticImage(validatedOptions, propsToHash);
     srcSets = srcSetTransforms.map((srcSet) => ({
-      url: globalThis.astroAsset.addStaticImage(srcSet.transform),
+      transform: srcSet.transform,
+      url: globalThis.astroAsset.addStaticImage(srcSet.transform, propsToHash),
       descriptor: srcSet.descriptor,
       attributes: srcSet.attributes
     }));

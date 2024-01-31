@@ -1,8 +1,7 @@
-import { e as createAstro, f as createComponent, r as renderTemplate, m as maybeRenderHead, i as renderComponent } from '../astro_e031d282.mjs';
+import { e as createAstro, f as createComponent, r as renderTemplate, m as maybeRenderHead, i as renderComponent } from '../astro_e3fc0b0e.mjs';
 import 'clsx';
-import { $ as $$Separator, a as $$Title, b as $$LayoutPost } from './blog_f1089548.mjs';
-/* empty css                         */import 'html-escaper';
-/* empty css                         *//* empty css                          *//* empty css                          *//* empty css                           *//* empty css                          */
+import { $ as $$Separator, a as $$Title, b as $$LayoutPost } from './blog_366a738a.mjs';
+/* empty css                         */
 const faqs = [
   {
     question: "¿Qué tipo de juego es Hogwarts Legacy?",
@@ -23,14 +22,14 @@ const $$FaqItem = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
   Astro2.self = $$FaqItem;
   const { item } = Astro2.props;
-  return renderTemplate`${maybeRenderHead()}<div class="faqItem" data-astro-cid-6rmelcr5><h3 data-astro-cid-6rmelcr5>${item.question}</h3><p data-astro-cid-6rmelcr5>${item.response}</p>${renderComponent($$result, "Separator", $$Separator, { "data-astro-cid-6rmelcr5": true })}</div>`;
+  return renderTemplate`${maybeRenderHead()}<div class="faqItem" data-astro-cid-6rmelcr5> <h3 data-astro-cid-6rmelcr5>${item.question}</h3> <p data-astro-cid-6rmelcr5>${item.response}</p> ${renderComponent($$result, "Separator", $$Separator, { "data-astro-cid-6rmelcr5": true })} </div> `;
 }, "/Users/millerossasamboni/Downloads/Programacion/Astro/harry-potter/src/components/FaqItem.astro", void 0);
 
 const $$Astro = createAstro();
 const $$Faq = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Faq;
-  return renderTemplate`${renderComponent($$result, "LayoutPost", $$LayoutPost, { "title": "faq", "data-astro-cid-6kmwghhu": true }, { "default": ($$result2) => renderTemplate`${maybeRenderHead()}<section data-astro-cid-6kmwghhu>${renderComponent($$result2, "Title", $$Title, { "title": "Preguntas frecuentes", "data-astro-cid-6kmwghhu": true })}${faqs.map((faq) => renderTemplate`${renderComponent($$result2, "FaqItem", $$FaqItem, { "item": faq, "data-astro-cid-6kmwghhu": true })}`)}</section>` })}`;
+  return renderTemplate`${renderComponent($$result, "LayoutPost", $$LayoutPost, { "title": "faq", "data-astro-cid-6kmwghhu": true }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<section data-astro-cid-6kmwghhu> ${renderComponent($$result2, "Title", $$Title, { "title": "Preguntas frecuentes", "data-astro-cid-6kmwghhu": true })} ${faqs.map((faq) => renderTemplate`${renderComponent($$result2, "FaqItem", $$FaqItem, { "item": faq, "data-astro-cid-6kmwghhu": true })}`)} </section> ` })} `;
 }, "/Users/millerossasamboni/Downloads/Programacion/Astro/harry-potter/src/pages/faq.astro", void 0);
 
 const $$file = "/Users/millerossasamboni/Downloads/Programacion/Astro/harry-potter/src/pages/faq.astro";
