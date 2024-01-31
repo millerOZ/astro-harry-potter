@@ -1,5 +1,5 @@
-import "./cardView.css";
-import type { CardItem } from "../types/types";
+import './CardView.css';
+import type { CardItem } from '../types/types';
 import { useState } from "react";
 
 interface CardsViewProps {
